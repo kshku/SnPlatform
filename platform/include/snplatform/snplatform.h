@@ -129,3 +129,5 @@ SN_API uint64_t sn_platform_cpu_cycle_counter_frequency(void);
  * @return Returns true if available, false otherwise.
  */
 SN_API bool sn_platform_cpu_feature_is_available(snCPUFeature feature);
+
+#undef SN_API
