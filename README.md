@@ -1,3 +1,3 @@
-# SnTemplate
+# SnPlatform
 
-A repo for quick start with Sn* projects by copy pasting the build and config files.
+Provides functions to get CPU features and more
