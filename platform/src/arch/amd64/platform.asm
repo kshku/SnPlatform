@@ -5,23 +5,23 @@ PUBLIC sn_xgetbv
 PUBLIC sn_rdtsc
 PUBLIC sn_rdtscp
 
-// eax, ebx, ecx, edx
+; eax, ebx, ecx, edx
 sn_cpuid PROC
-    // Check whether eax param is null
+    ; Check whether eax param is null
     test rcx, rcx
     jz done
 
-    // rbx is used by cpuid
+    ; rbx is used by cpuid
     push rbx
 
-    // Save rcx and rdx values in r10 and r11
+    ; Save rcx and rdx values in r10 and r11
     mov r10, rcx
     mov r11, rdx
     
-    // Move eax param value to eax reg
+    ; Move eax param value to eax reg
     mov eax, dword ptr [r10]
 
-    // Move ecx param value to ecx reg if exists
+    ; Move ecx param value to ecx reg if exists
     mov ecx, 0
     test r8, r8
     jz do_cpuid
@@ -30,7 +30,7 @@ sn_cpuid PROC
 do_cpuid:
     cpuid
 
-    // write_eax_param
+    ; write_eax_param
     mov dword ptr[r10], eax
 
 write_ebx_param:
@@ -55,7 +55,7 @@ done:
     ret
 sn_cpuid ENDP
 
-// ecx
+; ecx
 sn_xgetbv PROC
     xgetbv
     shl rdx, 32

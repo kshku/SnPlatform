@@ -92,12 +92,17 @@ static void test_cycle_counter_frequency(void)
 static void test_cycle_counter_progress(void)
 {
     uint64_t t0 = sn_platform_cpu_cycle_counter();
+
     // 10ms
+#ifdef SN_OS_WINDOWS
+    Sleep(10);
+#else
     struct timespec sleep_time = {
         .tv_sec = 0,
         .tv_nsec = 10 * 1000000
     };
     nanosleep(&sleep_time, NULL);
+#endif
     uint64_t t1 = sn_platform_cpu_cycle_counter();
 
     assert(t1 > t0);

@@ -17,7 +17,7 @@ uint32_t sn_platform_cache_line_size(void) {
         while (ptr < end) {
             SYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX *entry =
                 (SYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX *)ptr;
-            if (entry->Cache.Level == 1 && entry.Cache.Type == CacheData) {
+            if (entry->Cache.Level == 1 && entry->Cache.Type == CacheData) {
                 cache_size = entry->Cache.LineSize;
                 break;
             }

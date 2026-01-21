@@ -62,6 +62,8 @@
     #define SN_ENDIAN_BIG
 #elif defined(__LITTLE_ENDIAN__)
     #define SN_ENDIAN_LITTLE
+#elif defined(SN_OS_WINDOWS) // Windows is running on little endian everywhere
+	#define SN_ENDIAN_LITTLE
 #else
     #error "Couldn't detect the endian"
 #endif
