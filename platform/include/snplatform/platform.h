@@ -23,8 +23,9 @@
 #endif
 
 // Architecture
-#if defined(__x86_64__) || defined(_M_X64) || defined(__amd64__) || defined(__amd64) || defined(__x86_64) || defined(_M_AMD64)
-    #define SN_ARCH_AMD64 
+#if defined(__x86_64__) || defined(_M_X64) || defined(__amd64__) || defined(__amd64) \
+    || defined(__x86_64) || defined(_M_AMD64)
+    #define SN_ARCH_AMD64
 #elif defined(__aarch64__)
     #define SN_ARCH_ARM64
 #elif defined(__riscv) && (__riscv_xlen == 64)
@@ -62,8 +63,8 @@
     #define SN_ENDIAN_BIG
 #elif defined(__LITTLE_ENDIAN__)
     #define SN_ENDIAN_LITTLE
-#elif defined(SN_OS_WINDOWS) // Windows is running on little endian everywhere
-	#define SN_ENDIAN_LITTLE
+#elif defined(SN_OS_WINDOWS)  // Windows is running on little endian everywhere
+    #define SN_ENDIAN_LITTLE
 #else
     #error "Couldn't detect the endian"
 #endif

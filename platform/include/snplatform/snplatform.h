@@ -1,9 +1,8 @@
 #pragma once
 
-#include "snplatform/platform.h"
-#include "snplatform/defines.h"
-
 #include "snplatform/api.h"
+#include "snplatform/defines.h"
+#include "snplatform/platform.h"
 
 typedef enum snCPUVendor {
     SN_CPU_VENDOR_UNKNOWN = 0,
@@ -35,7 +34,6 @@ typedef enum snCPUFeature {
 #endif
     SN_CPU_FEATURE_MAX
 } snCPUFeature;
-
 
 /**
  * @brief Get the system memory page size.

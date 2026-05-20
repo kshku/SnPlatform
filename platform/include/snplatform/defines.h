@@ -2,11 +2,11 @@
 
 #include "snplatform/platform.h"
 
+#include <assert.h>
 #include <stdalign.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
-#include <assert.h>
 
 #if defined(SN_COMPILER_MSVC)
     #define SN_FORCE_INLINE static __forceinline

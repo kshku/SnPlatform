@@ -2,7 +2,7 @@
 
 #if defined(SN_OS_WINDOWS)
 
-#include <windows.h>
+    #include <windows.h>
 
 uint32_t sn_platform_cache_line_size(void) {
     static uint32_t cache_size = 0;
@@ -15,8 +15,7 @@ uint32_t sn_platform_cache_line_size(void) {
         uint8_t *end = ptr + len;
 
         while (ptr < end) {
-            SYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX *entry =
-                (SYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX *)ptr;
+            SYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX *entry = (SYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX *)ptr;
             if (entry->Cache.Level == 1 && entry->Cache.Type == CacheData) {
                 cache_size = entry->Cache.LineSize;
                 break;
@@ -48,10 +47,8 @@ uint32_t sn_platform_physical_core_count(void) {
         uint8_t *end = ptr + len;
 
         while (ptr < end) {
-            SYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX *entry =
-                (SYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX *)ptr;
-                        if (entry->Relationship == RelationProcessorCore)
-                cores++;
+            SYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX *entry = (SYSTEM_LOGICAL_PROCESSOR_INFORMATION_EX *)ptr;
+            if (entry->Relationship == RelationProcessorCore) cores++;
             ptr += entry->Size;
         }
     }

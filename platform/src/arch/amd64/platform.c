@@ -50,23 +50,23 @@ uint64_t sn_rdtscp(void);
 static void detect_features(uint8_t features[SN_CPU_FEATURE_MAX]);
 
 snCPUVendor sn_platform_cpu_vendor(void) {
-    static snCPUVendor vendor = SN_CPU_VENDOR_UNKNOWN; // = 0
+    static snCPUVendor vendor = SN_CPU_VENDOR_UNKNOWN;  // = 0
     if (vendor) return vendor;
 
     uint32_t eax, ebx, ecx, edx;
     eax = 0;
     sn_cpuid(&eax, &ebx, &ecx, &edx);
-    
+
     if (ebx == 0x756e6547 && edx == 0x49656e69 && ecx == 0x6c65746e) vendor = SN_CPU_VENDOR_INTEL;
-    else if (ebx == 0x68747541 && edx == 0x69746e65 && ecx == 0x444d4163) vendor = SN_CPU_VENDOR_AMD;
+    else if (ebx == 0x68747541 && edx == 0x69746e65 && ecx == 0x444d4163)
+        vendor = SN_CPU_VENDOR_AMD;
     else vendor = SN_CPU_VENDOR_UNKNOWN;
-    
+
     return vendor;
 }
 
 uint64_t sn_platform_cpu_cycle_counter(void) {
-    if (sn_platform_cpu_feature_is_available(SN_CPU_FEATURE_RDTSCP))
-        return sn_rdtscp();
+    if (sn_platform_cpu_feature_is_available(SN_CPU_FEATURE_RDTSCP)) return sn_rdtscp();
     return sn_rdtsc();
 }
 
@@ -155,7 +155,7 @@ static void detect_features(uint8_t features[SN_CPU_FEATURE_MAX]) {
     if (SN_BIT_CHECK(edx, 27)) SN_BYTE_ARRAY_SET(features, SN_CPU_FEATURE_RDTSCP);
 }
 
-#if !defined(SN_COMPILER_MSVC)
+    #if !defined(SN_COMPILER_MSVC)
 
 void sn_cpuid(uint32_t *eax, uint32_t *ebx, uint32_t *ecx, uint32_t *edx) {
     if (!eax) return;
@@ -184,10 +184,10 @@ uint64_t sn_rdtsc(void) {
 
 uint64_t sn_rdtscp(void) {
     uint32_t lo, hi;
-    __asm__ volatile("rdtscp" : "=a"(lo), "=d"(hi) :: "rcx");
+    __asm__ volatile("rdtscp" : "=a"(lo), "=d"(hi)::"rcx");
     return (((uint64_t)hi) << 32) | (uint64_t)lo;
 }
 
-#endif
+    #endif
 
 #endif
