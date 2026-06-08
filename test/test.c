@@ -1,6 +1,7 @@
 #define _GNU_SOURCE
-#include <assert.h>
+#define TEST_ASSERT(x) do { if (!(x)) { fprintf(stderr, "FAIL [%s:%d]: %s\n", __FILE__, __LINE__, #x); abort(); } } while(0)
 #include <snplatform/snplatform.h>
+#include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
 
@@ -15,7 +16,7 @@ static void test_cpuid_basic(void) {
     sn_cpuid(&eax, &ebx, &ecx, &edx);
 
     /* CPUID leaf 0 must return non-zero max leaf */
-    assert(eax != 0);
+    TEST_ASSERT(eax != 0);
 
     char vendor[13];
     ((uint32_t *)vendor)[0] = ebx;
@@ -26,20 +27,20 @@ static void test_cpuid_basic(void) {
     printf("[snPlatform] CPUID vendor string: %s\n", vendor);
 
     snCPUVendor v = sn_platform_cpu_vendor();
-    assert(v != SN_CPU_VENDOR_UNKNOWN);
+    TEST_ASSERT(v != SN_CPU_VENDOR_UNKNOWN);
 }
 
 static void test_cpu_features(void) {
 #if defined(SN_ARCH_AMD64)
     /* These should be true on any remotely modern x86-64 CPU */
-    assert(sn_platform_cpu_feature_is_available(SN_CPU_FEATURE_SSE));
-    assert(sn_platform_cpu_feature_is_available(SN_CPU_FEATURE_SSE2));
+    TEST_ASSERT(sn_platform_cpu_feature_is_available(SN_CPU_FEATURE_SSE));
+    TEST_ASSERT(sn_platform_cpu_feature_is_available(SN_CPU_FEATURE_SSE2));
 
     printf("[snPlatform] SSE  : %d\n", sn_platform_cpu_feature_is_available(SN_CPU_FEATURE_SSE));
     printf("[snPlatform] SSE2 : %d\n", sn_platform_cpu_feature_is_available(SN_CPU_FEATURE_SSE2));
     printf("[snPlatform] AVX  : %d\n", sn_platform_cpu_feature_is_available(SN_CPU_FEATURE_AVX));
 #elif defined(SN_ARCH_ARM64)
-    assert(sn_platform_cpu_feature_is_available(SN_CPU_FEATURE_NEON));
+    TEST_ASSERT(sn_platform_cpu_feature_is_available(SN_CPU_FEATURE_NEON));
     printf("[snPlatform] NEON : %d\n", sn_platform_cpu_feature_is_available(SN_CPU_FEATURE_NEON));
 #endif
 }
@@ -48,7 +49,7 @@ static void test_rdtsc_monotonic(void) {
     uint64_t a = sn_rdtsc();
     uint64_t b = sn_rdtsc();
 
-    assert(b > a);
+    TEST_ASSERT(b > a);
 
     printf("[snPlatform] RDTSC delta: %llu\n", (unsigned long long)(b - a));
 }
@@ -57,7 +58,7 @@ static void test_rdtscp_ordering(void) {
     uint64_t a = sn_rdtsc();
     uint64_t b = sn_rdtscp();
 
-    assert(b >= a);
+    TEST_ASSERT(b >= a);
 
     printf("[snPlatform] RDTSCP >= RDTSC verified\n");
 }
@@ -71,8 +72,8 @@ static void test_cycle_counter_frequency(void) {
     }
 
     /* Sanity bounds: 100 MHz – 10 GHz */
-    assert(freq > 100ULL * 1000 * 1000);
-    assert(freq < 10ULL * 1000 * 1000 * 1000);
+    TEST_ASSERT(freq > 100ULL * 1000 * 1000);
+    TEST_ASSERT(freq < 10ULL * 1000 * 1000 * 1000);
 
     printf("[snPlatform] Cycle counter frequency: %llu Hz\n", (unsigned long long)freq);
 }
@@ -89,7 +90,7 @@ static void test_cycle_counter_progress(void) {
 #endif
     uint64_t t1 = sn_platform_cpu_cycle_counter();
 
-    assert(t1 > t0);
+    TEST_ASSERT(t1 > t0);
 
     printf("[snPlatform] Cycle counter progressed over time\n");
 }
