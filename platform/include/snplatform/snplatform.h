@@ -4,14 +4,14 @@
 #include "snplatform/defines.h"
 #include "snplatform/platform.h"
 
-typedef enum snCPUVendor {
+typedef enum SnCPUVendor {
     SN_CPU_VENDOR_UNKNOWN = 0,
     SN_CPU_VENDOR_INTEL,
     SN_CPU_VENDOR_AMD,
     SN_CPU_VENDOR_ARM,
-} snCPUVendor;
+} SnCPUVendor;
 
-typedef enum snCPUFeature {
+typedef enum SnCPUFeature {
 #if defined(SN_ARCH_AMD64)
     SN_CPU_FEATURE_SSE,
     SN_CPU_FEATURE_SSE2,
@@ -33,7 +33,7 @@ typedef enum snCPUFeature {
     SN_CPU_FEATURE_ATOMICS,
 #endif
     SN_CPU_FEATURE_MAX
-} snCPUFeature;
+} SnCPUFeature;
 
 /**
  * @brief Get the system memory page size.
@@ -72,7 +72,7 @@ SN_API uint32_t sn_platform_physical_core_count(void);
  *
  * @return Returns CPU vendor.
  */
-SN_API snCPUVendor sn_platform_cpu_vendor(void);
+SN_API SnCPUVendor sn_platform_cpu_vendor(void);
 
 /**
  * @brief Read raw CPU cycle or tick counter.
@@ -106,6 +106,6 @@ SN_API uint64_t sn_platform_cpu_cycle_counter_frequency(void);
  *
  * @return Returns true if available, false otherwise.
  */
-SN_API bool sn_platform_cpu_feature_is_available(snCPUFeature feature);
+SN_API bool sn_platform_cpu_feature_is_available(SnCPUFeature feature);
 
 #undef SN_API

@@ -26,7 +26,7 @@ static void test_cpuid_basic(void) {
 
     printf("[snPlatform] CPUID vendor string: %s\n", vendor);
 
-    snCPUVendor v = sn_platform_cpu_vendor();
+    SnCPUVendor v = sn_platform_cpu_vendor();
     TEST_ASSERT(v != SN_CPU_VENDOR_UNKNOWN);
 }
 

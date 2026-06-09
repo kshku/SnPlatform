@@ -49,8 +49,8 @@ uint64_t sn_rdtscp(void);
 
 static void detect_features(uint8_t features[SN_CPU_FEATURE_MAX]);
 
-snCPUVendor sn_platform_cpu_vendor(void) {
-    static snCPUVendor vendor = SN_CPU_VENDOR_UNKNOWN;  // = 0
+SnCPUVendor sn_platform_cpu_vendor(void) {
+    static SnCPUVendor vendor = SN_CPU_VENDOR_UNKNOWN;  // = 0
     if (vendor) return vendor;
 
     uint32_t eax, ebx, ecx, edx;
@@ -90,7 +90,7 @@ uint64_t sn_platform_cpu_cycle_counter_frequency(void) {
     return 0;
 }
 
-bool sn_platform_cpu_feature_is_available(snCPUFeature feature) {
+bool sn_platform_cpu_feature_is_available(SnCPUFeature feature) {
     // Byte array for features
     static uint8_t features[SN_CPU_FEATURE_MAX] = {0};
     static bool cached = false;
