@@ -53,8 +53,7 @@ SnCPUVendor sn_platform_cpu_vendor(void) {
     static SnCPUVendor vendor = SN_CPU_VENDOR_UNKNOWN;  // = 0
     if (vendor) return vendor;
 
-    uint32_t eax, ebx, ecx, edx;
-    eax = 0;
+    uint32_t eax = 0, ebx, ecx = 0, edx;
     sn_cpuid(&eax, &ebx, &ecx, &edx);
 
     if (ebx == 0x756e6547 && edx == 0x49656e69 && ecx == 0x6c65746e) vendor = SN_CPU_VENDOR_INTEL;
@@ -104,10 +103,7 @@ bool sn_platform_cpu_feature_is_available(SnCPUFeature feature) {
 }
 
 static void detect_features(uint8_t features[SN_CPU_FEATURE_MAX]) {
-    uint32_t eax, ebx, ecx, edx;
-
-    // Get the values for leaf = 1
-    eax = 0x00000001;
+    uint32_t eax = 0x00000001, ebx, ecx = 0, edx;
     sn_cpuid(&eax, &ebx, &ecx, &edx);
 
     if (SN_BIT_CHECK(edx, 25)) SN_BYTE_ARRAY_SET(features, SN_CPU_FEATURE_SSE);
