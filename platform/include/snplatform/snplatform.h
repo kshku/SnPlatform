@@ -1,8 +1,8 @@
 #pragma once
 
+#include <sncore/defines.h>
+#include <sncore/platform.h>
 #include "snplatform/api.h"
-#include "snplatform/defines.h"
-#include "snplatform/platform.h"
 
 typedef enum SnCPUVendor {
     SN_CPU_VENDOR_UNKNOWN = 0,
