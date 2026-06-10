@@ -6,6 +6,13 @@ if (CMAKE_SYSTEM_NAME STREQUAL "Windows")
     enable_language(ASM_MASM)
 endif()
 
+include(FetchContent)
+FetchContent_Declare(sncore
+    GIT_REPOSITORY https://github.com/kshku/SnCore.git
+    GIT_TAG main
+)
+FetchContent_MakeAvailable(sncore)
+
 set(CMAKE_C_EXTENSIONS OFF)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_STANDARD 17)

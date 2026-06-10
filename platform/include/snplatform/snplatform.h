@@ -1,8 +1,8 @@
 #pragma once
 
+#include <sncore/defines.h>
+#include <sncore/platform.h>
 #include "snplatform/api.h"
-#include "snplatform/defines.h"
-#include "snplatform/platform.h"
 
 typedef enum SnCPUVendor {
     SN_CPU_VENDOR_UNKNOWN = 0,
@@ -40,7 +40,7 @@ typedef enum SnCPUFeature {
  *
  * @return Returns the number of bytes.
  */
-SN_API uint32_t sn_platform_page_size(void);
+SN_PLATFORM_API uint32_t sn_platform_page_size(void);
 
 /**
  * @brief Get the L1 data cache line size.
@@ -49,14 +49,14 @@ SN_API uint32_t sn_platform_page_size(void);
  *
  * @return Returns cache line size in bytes.
  */
-SN_API uint32_t sn_platform_cache_line_size(void);
+SN_PLATFORM_API uint32_t sn_platform_cache_line_size(void);
 
 /**
  * @brief Get number of logical CPU cores.
  *
  * @return Returns number of logical CPU cores.
  */
-SN_API uint32_t sn_platform_logical_core_count(void);
+SN_PLATFORM_API uint32_t sn_platform_logical_core_count(void);
 
 /**
  * @brief Get number of physical CPU cores.
@@ -65,21 +65,21 @@ SN_API uint32_t sn_platform_logical_core_count(void);
  *
  * @return Returns number of physical CPU cores.
  */
-SN_API uint32_t sn_platform_physical_core_count(void);
+SN_PLATFORM_API uint32_t sn_platform_physical_core_count(void);
 
 /**
  * @brief Get the CPU vendor.
  *
  * @return Returns CPU vendor.
  */
-SN_API SnCPUVendor sn_platform_cpu_vendor(void);
+SN_PLATFORM_API SnCPUVendor sn_platform_cpu_vendor(void);
 
 /**
  * @brief Read raw CPU cycle or tick counter.
  *
  * @return Current cycle/tick count.
  */
-SN_API uint64_t sn_platform_cpu_cycle_counter(void);
+SN_PLATFORM_API uint64_t sn_platform_cpu_cycle_counter(void);
 
 /**
  * @brief Check whether the CPU cycle counter is invariant.
@@ -88,7 +88,7 @@ SN_API uint64_t sn_platform_cpu_cycle_counter(void);
  *
  * @note On x86, this corresponds to "Invariant TSC".
  */
-SN_API bool sn_platform_cpu_cycle_counter_is_invariant(void);
+SN_PLATFORM_API bool sn_platform_cpu_cycle_counter_is_invariant(void);
 
 /**
  * @brief Get cycle counter frequency.
@@ -97,7 +97,7 @@ SN_API bool sn_platform_cpu_cycle_counter_is_invariant(void);
  *
  * @note This value can be computed at runtime using calibration (using monotonic clock).
  */
-SN_API uint64_t sn_platform_cpu_cycle_counter_frequency(void);
+SN_PLATFORM_API uint64_t sn_platform_cpu_cycle_counter_frequency(void);
 
 /**
  * @brief Check whether the CPU feature is available.
@@ -106,6 +106,5 @@ SN_API uint64_t sn_platform_cpu_cycle_counter_frequency(void);
  *
  * @return Returns true if available, false otherwise.
  */
-SN_API bool sn_platform_cpu_feature_is_available(SnCPUFeature feature);
+SN_PLATFORM_API bool sn_platform_cpu_feature_is_available(SnCPUFeature feature);
 
-#undef SN_API
