@@ -1,3 +1,5 @@
+enable_testing()
+
 set(SRCS
     test.c
 )
@@ -5,6 +7,8 @@ set(SRCS
 add_executable(sn_platform_test)
 target_sources(sn_platform_test PRIVATE ${SRCS})
 target_link_libraries(sn_platform_test PRIVATE snplatform)
+
+add_test(NAME sn_platform_test COMMAND sn_platform_test)
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Windows" AND SN_PLATFORM_BUILD_SHARED)
     add_custom_target(copy_dlls ALL
