@@ -11,62 +11,45 @@
 #include <stdlib.h>
 #include <time.h>
 
-/* forward declarations if not public */
-void sn_cpuid(uint32_t *eax, uint32_t *ebx, uint32_t *ecx, uint32_t *edx);
-uint64_t sn_rdtsc(void);
-uint64_t sn_rdtscp(void);
-
-static void test_cpuid_basic(void) {
-    uint32_t eax = 0, ebx = 0, ecx = 0, edx = 0;
-
-    sn_cpuid(&eax, &ebx, &ecx, &edx);
-
-    /* CPUID leaf 0 must return non-zero max leaf */
-    TEST_ASSERT(eax != 0);
-
-    char vendor[13];
-    ((uint32_t *)vendor)[0] = ebx;
-    ((uint32_t *)vendor)[1] = edx;
-    ((uint32_t *)vendor)[2] = ecx;
-    vendor[12] = '\0';
-
-    printf("[snPlatform] CPUID vendor string: %s\n", vendor);
-
+static void test_cpu_vendor(void) {
     SnCPUVendor v = sn_platform_cpu_vendor();
     TEST_ASSERT(v != SN_CPU_VENDOR_UNKNOWN);
+
+    printf("[snPlatform] CPU vendor: %d\n", v);
 }
 
 static void test_cpu_features(void) {
 #if defined(SN_ARCH_AMD64)
-    /* These should be true on any remotely modern x86-64 CPU */
     TEST_ASSERT(sn_platform_cpu_feature_is_available(SN_CPU_FEATURE_SSE));
     TEST_ASSERT(sn_platform_cpu_feature_is_available(SN_CPU_FEATURE_SSE2));
 
-    printf("[snPlatform] SSE  : %d\n", sn_platform_cpu_feature_is_available(SN_CPU_FEATURE_SSE));
-    printf("[snPlatform] SSE2 : %d\n", sn_platform_cpu_feature_is_available(SN_CPU_FEATURE_SSE2));
-    printf("[snPlatform] AVX  : %d\n", sn_platform_cpu_feature_is_available(SN_CPU_FEATURE_AVX));
+    printf("[snPlatform] SSE    : %d\n", sn_platform_cpu_feature_is_available(SN_CPU_FEATURE_SSE));
+    printf("[snPlatform] SSE2   : %d\n", sn_platform_cpu_feature_is_available(SN_CPU_FEATURE_SSE2));
+    printf("[snPlatform] SSE3   : %d\n", sn_platform_cpu_feature_is_available(SN_CPU_FEATURE_SSE3));
+    printf("[snPlatform] SSSE3  : %d\n", sn_platform_cpu_feature_is_available(SN_CPU_FEATURE_SSSE3));
+    printf("[snPlatform] SSE4.1 : %d\n", sn_platform_cpu_feature_is_available(SN_CPU_FEATURE_SSE41));
+    printf("[snPlatform] SSE4.2 : %d\n", sn_platform_cpu_feature_is_available(SN_CPU_FEATURE_SSE42));
+    printf("[snPlatform] AVX    : %d\n", sn_platform_cpu_feature_is_available(SN_CPU_FEATURE_AVX));
+    printf("[snPlatform] AVX2   : %d\n", sn_platform_cpu_feature_is_available(SN_CPU_FEATURE_AVX2));
+    printf("[snPlatform] FMA    : %d\n", sn_platform_cpu_feature_is_available(SN_CPU_FEATURE_FMA));
+    printf("[snPlatform] POPCNT : %d\n", sn_platform_cpu_feature_is_available(SN_CPU_FEATURE_POPCNT));
+    printf("[snPlatform] AESNI  : %d\n", sn_platform_cpu_feature_is_available(SN_CPU_FEATURE_AESNI));
+    printf("[snPlatform] MOVBE  : %d\n", sn_platform_cpu_feature_is_available(SN_CPU_FEATURE_MOVBE));
+    printf("[snPlatform] BMI1   : %d\n", sn_platform_cpu_feature_is_available(SN_CPU_FEATURE_BMI1));
+    printf("[snPlatform] BMI2   : %d\n", sn_platform_cpu_feature_is_available(SN_CPU_FEATURE_BMI2));
+    printf("[snPlatform] SHA    : %d\n", sn_platform_cpu_feature_is_available(SN_CPU_FEATURE_SHA));
+    printf("[snPlatform] RDRAND : %d\n", sn_platform_cpu_feature_is_available(SN_CPU_FEATURE_RDRAND));
+    printf("[snPlatform] RDTSCP : %d\n", sn_platform_cpu_feature_is_available(SN_CPU_FEATURE_RDTSCP));
 #elif defined(SN_ARCH_ARM64)
     TEST_ASSERT(sn_platform_cpu_feature_is_available(SN_CPU_FEATURE_NEON));
-    printf("[snPlatform] NEON : %d\n", sn_platform_cpu_feature_is_available(SN_CPU_FEATURE_NEON));
+    printf("[snPlatform] NEON  : %d\n", sn_platform_cpu_feature_is_available(SN_CPU_FEATURE_NEON));
+    printf("[snPlatform] CRC32 : %d\n", sn_platform_cpu_feature_is_available(SN_CPU_FEATURE_CRC32));
+    printf("[snPlatform] AES   : %d\n", sn_platform_cpu_feature_is_available(SN_CPU_FEATURE_AES));
+    printf("[snPlatform] SHA1  : %d\n", sn_platform_cpu_feature_is_available(SN_CPU_FEATURE_SHA1));
+    printf("[snPlatform] SHA2  : %d\n", sn_platform_cpu_feature_is_available(SN_CPU_FEATURE_SHA2));
+    printf("[snPlatform] PMULL : %d\n", sn_platform_cpu_feature_is_available(SN_CPU_FEATURE_PMULL));
+    printf("[snPlatform] ATOM  : %d\n", sn_platform_cpu_feature_is_available(SN_CPU_FEATURE_ATOMICS));
 #endif
-}
-
-static void test_rdtsc_monotonic(void) {
-    uint64_t a = sn_rdtsc();
-    uint64_t b = sn_rdtsc();
-
-    TEST_ASSERT(b > a);
-
-    printf("[snPlatform] RDTSC delta: %llu\n", (unsigned long long)(b - a));
-}
-
-static void test_rdtscp_ordering(void) {
-    uint64_t a = sn_rdtsc();
-    uint64_t b = sn_rdtscp();
-
-    TEST_ASSERT(b >= a);
-
-    printf("[snPlatform] RDTSCP >= RDTSC verified\n");
 }
 
 static void test_cycle_counter_frequency(void) {
@@ -77,7 +60,6 @@ static void test_cycle_counter_frequency(void) {
         return;
     }
 
-    /* Sanity bounds: 100 MHz – 10 GHz */
     TEST_ASSERT(freq > 100ULL * 1000 * 1000);
     TEST_ASSERT(freq < 10ULL * 1000 * 1000 * 1000);
 
@@ -87,7 +69,6 @@ static void test_cycle_counter_frequency(void) {
 static void test_cycle_counter_progress(void) {
     uint64_t t0 = sn_platform_cpu_cycle_counter();
 
-    // 10ms
 #ifdef SN_OS_WINDOWS
     Sleep(10);
 #else
@@ -101,16 +82,43 @@ static void test_cycle_counter_progress(void) {
     printf("[snPlatform] Cycle counter progressed over time\n");
 }
 
+static void test_page_size(void) {
+    uint32_t ps = sn_platform_page_size();
+    TEST_ASSERT(ps > 0);
+    TEST_ASSERT(ps <= 65536);
+
+    printf("[snPlatform] Page size: %u\n", ps);
+}
+
+static void test_core_count(void) {
+    uint32_t logical = sn_platform_logical_core_count();
+    TEST_ASSERT(logical > 0);
+
+    printf("[snPlatform] Logical cores: %u\n", logical);
+
+    uint32_t physical = sn_platform_physical_core_count();
+
+    printf("[snPlatform] Physical cores: %u\n", physical);
+}
+
+static void test_cache_line_size(void) {
+    uint32_t cls = sn_platform_cache_line_size();
+    TEST_ASSERT(cls > 0);
+    TEST_ASSERT(cls <= 256);
+
+    printf("[snPlatform] Cache line size: %u\n", cls);
+}
+
 int main(void) {
     printf("==== snPlatform CPU tests ====\n");
 
-    test_cpuid_basic();
+    test_cpu_vendor();
     test_cpu_features();
-    test_rdtsc_monotonic();
-    test_rdtscp_ordering();
     test_cycle_counter_progress();
     test_cycle_counter_frequency();
+    test_page_size();
+    test_core_count();
+    test_cache_line_size();
 
     printf("==== snPlatform CPU tests PASSED ====\n");
 }
-

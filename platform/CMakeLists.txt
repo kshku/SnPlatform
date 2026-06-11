@@ -15,7 +15,8 @@ target_link_libraries(snplatform PUBLIC sncore)
 if(MSVC)
     add_custom_command(TARGET snplatform PRE_BUILD
         COMMAND "${CMAKE_COMMAND}" -E make_directory "$(IntDir)src/arch/amd64"
-        COMMENT "Creating MASM output directory"
+        COMMAND "${CMAKE_COMMAND}" -E make_directory "$(IntDir)src/arch/arm64"
+        COMMENT "Creating MASM output directories"
     )
 endif()
 
