@@ -12,8 +12,11 @@ uint32_t sn_platform_cache_line_size(void) {
     if (cache_size) return cache_size;
 
     #if defined(SN_OS_MAC)
-    size_t size = sizeof(cache_size);
-    if (sysctlbyname("hw.cachelinesize", &cache_size, &size, NULL, 0) != 0) cache_size = 0;
+    uint64_t val = 0;
+    size_t size = sizeof(val);
+    if (sysctlbyname("hw.cachelinesize", &val, &size, NULL, 0) == 0) {
+        cache_size = (uint32_t)val;
+    }
     #else
     long v = sysconf(_SC_LEVEL1_DCACHE_LINESIZE);
     if (v > 0) cache_size = (uint32_t)v;
