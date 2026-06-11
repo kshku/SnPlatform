@@ -127,6 +127,12 @@ static void detect_features(uint8_t features[SN_CPU_FEATURE_MAX]) {
 
     if (SN_BIT_CHECK(ecx, 12)) SN_BYTE_ARRAY_SET(features, SN_CPU_FEATURE_FMA);
 
+    if (SN_BIT_CHECK(ecx, 22)) SN_BYTE_ARRAY_SET(features, SN_CPU_FEATURE_MOVBE);
+
+    if (SN_BIT_CHECK(ecx, 23)) SN_BYTE_ARRAY_SET(features, SN_CPU_FEATURE_POPCNT);
+
+    if (SN_BIT_CHECK(ecx, 25)) SN_BYTE_ARRAY_SET(features, SN_CPU_FEATURE_AESNI);
+
     if (SN_BIT_CHECK(edx, 8)) SN_BYTE_ARRAY_SET(features, SN_CPU_FEATURE_CMPXCHG8B);
 
     if (SN_BIT_CHECK(ecx, 13)) SN_BYTE_ARRAY_SET(features, SN_CPU_FEATURE_CMPXCHG16B);
@@ -138,8 +144,14 @@ static void detect_features(uint8_t features[SN_CPU_FEATURE_MAX]) {
     ecx = 0x00000000;
     sn_cpuid(&eax, &ebx, &ecx, &edx);
 
-    if (SN_BYTE_ARRAY_CHECK(features, SN_CPU_FEATURE_AVX) && SN_BIT_CHECK(ebx, 5))
+    if (SN_BIT_CHECK(ebx, 3)) SN_BYTE_ARRAY_SET(features, SN_CPU_FEATURE_BMI1);
+
+    if (SN_BIT_CHECK(ebx, 5) && SN_BYTE_ARRAY_CHECK(features, SN_CPU_FEATURE_AVX))
         SN_BYTE_ARRAY_SET(features, SN_CPU_FEATURE_AVX2);
+
+    if (SN_BIT_CHECK(ebx, 8)) SN_BYTE_ARRAY_SET(features, SN_CPU_FEATURE_BMI2);
+
+    if (SN_BIT_CHECK(ebx, 29)) SN_BYTE_ARRAY_SET(features, SN_CPU_FEATURE_SHA);
 
     eax = 0x80000001;
     ecx = 0x00000000;

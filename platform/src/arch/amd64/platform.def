@@ -1,6 +1,0 @@
-LIBRARY snplatform
-EXPORTS
-    sn_cpuid 
-    sn_xgetbv
-    sn_rdtsc
-    sn_rdtscp
