@@ -1,8 +1,14 @@
 #define _GNU_SOURCE
-#define TEST_ASSERT(x) do { if (!(x)) { fprintf(stderr, "FAIL [%s:%d]: %s\n", __FILE__, __LINE__, #x); abort(); } } while(0)
+#define TEST_ASSERT(x)                                                     \
+    do {                                                                   \
+        if (!(x)) {                                                        \
+            fprintf(stderr, "FAIL [%s:%d]: %s\n", __FILE__, __LINE__, #x); \
+            abort();                                                       \
+        }                                                                  \
+    } while (0)
 #include <snplatform/snplatform.h>
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <time.h>
 
 /* forward declarations if not public */
