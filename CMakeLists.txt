@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.15...3.31)
+cmake_minimum_required(VERSION 3.15...4.3)
 
 project(SnPlatform VERSION 0.0.0 DESCRIPTION "A platform for Sn* projects" LANGUAGES C)
 
