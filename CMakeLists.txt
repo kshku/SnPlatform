@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15...3.31)
 
-project(SnPlatform VERSION 0.1.0 DESCRIPTION "A platform for Sn* projects" LANGUAGES C)
+project(SnPlatform VERSION 0.2.0 DESCRIPTION "A platform for Sn* projects" LANGUAGES C)
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
     if(CMAKE_SYSTEM_PROCESSOR MATCHES "ARM64|aarch64|AARCH64")
