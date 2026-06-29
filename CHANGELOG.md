@@ -1,10 +1,15 @@
 # Changelog
 
-## [0.1.0] — 2026-06-11
+## [0.2.0] - 2026-06-29
+
+### Changes
+- Updated the dependency versions
+
+## [0.1.0] - 2026-06-11
 
 - First release. See [0.0.0] section in CHANGELOG.md for full changelog.
 
-## [0.0.0] — 2026-01-16
+## [0.0.0] - 2026-01-16
 
 ### Added
 - CPU vendor identification
