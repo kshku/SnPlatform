@@ -2,6 +2,18 @@
 
 #if defined(SN_ARCH_AMD64)
 
+    /*
+     * The instruction wrappers below are internal helpers, never part of the
+     * public API. On MSVC they come from platform.asm, so they have to stay
+     * externally visible for this file to bind to them. Everywhere else they are
+     * defined here, and static keeps them out of the library's symbol table.
+     */
+    #if defined(SN_COMPILER_MSVC)
+        #define SN_INTRINSIC
+    #else
+        #define SN_INTRINSIC static
+    #endif
+
 /**
  * @brief Get the values of cpuid.
  *
@@ -22,7 +34,7 @@
  * @param ecx Pointer to store ecx register value.
  * @param edx Pointer to store edx register value.
  */
-void sn_cpuid(uint32_t *eax, uint32_t *ebx, uint32_t *ecx, uint32_t *edx);
+SN_INTRINSIC void sn_cpuid(uint32_t *eax, uint32_t *ebx, uint32_t *ecx, uint32_t *edx);
 
 /**
  * @brief Get the 64 bit value set from xgetbv instruction.
@@ -31,21 +43,21 @@ void sn_cpuid(uint32_t *eax, uint32_t *ebx, uint32_t *ecx, uint32_t *edx);
  *
  * @return Returns the 64 bit value given by xgetbv instruction(edx:eax)
  */
-uint64_t sn_xgetbv(uint32_t ecx);
+SN_INTRINSIC uint64_t sn_xgetbv(uint32_t ecx);
 
 /**
  * @brief rdtsc instruction.
  *
  * @return Returns the 64 bit value from instruction(edx:eax).
  */
-uint64_t sn_rdtsc(void);
+SN_INTRINSIC uint64_t sn_rdtsc(void);
 
 /**
  * @brief rdtscp instruction.
  *
  * @return Returns the 64 bit value from instruction(edx:eax).
  */
-uint64_t sn_rdtscp(void);
+SN_INTRINSIC uint64_t sn_rdtscp(void);
 
 static void detect_features(uint8_t features[SN_CPU_FEATURE_MAX]);
 
@@ -165,7 +177,7 @@ static void detect_features(uint8_t features[SN_CPU_FEATURE_MAX]) {
 
     #if !defined(SN_COMPILER_MSVC)
 
-void sn_cpuid(uint32_t *eax, uint32_t *ebx, uint32_t *ecx, uint32_t *edx) {
+SN_INTRINSIC void sn_cpuid(uint32_t *eax, uint32_t *ebx, uint32_t *ecx, uint32_t *edx) {
     if (!eax) return;
 
     uint32_t a = *eax, b, c = ecx ? *ecx : 0, d;
@@ -178,19 +190,19 @@ void sn_cpuid(uint32_t *eax, uint32_t *ebx, uint32_t *ecx, uint32_t *edx) {
     if (edx) *edx = d;
 }
 
-uint64_t sn_xgetbv(uint32_t ecx) {
+SN_INTRINSIC uint64_t sn_xgetbv(uint32_t ecx) {
     uint32_t eax, edx;
     __asm__ volatile("xgetbv" : "=a"(eax), "=d"(edx) : "c"(ecx));
     return ((((uint64_t)edx) << 32) | (uint64_t)eax);
 }
 
-uint64_t sn_rdtsc(void) {
+SN_INTRINSIC uint64_t sn_rdtsc(void) {
     uint32_t lo, hi;
     __asm__ volatile("rdtsc" : "=a"(lo), "=d"(hi));
     return (((uint64_t)hi) << 32) | (uint64_t)lo;
 }
 
-uint64_t sn_rdtscp(void) {
+SN_INTRINSIC uint64_t sn_rdtscp(void) {
     uint32_t lo, hi;
     __asm__ volatile("rdtscp" : "=a"(lo), "=d"(hi)::"rcx");
     return (((uint64_t)hi) << 32) | (uint64_t)lo;
@@ -198,4 +210,5 @@ uint64_t sn_rdtscp(void) {
 
     #endif
 
+    #undef SN_INTRINSIC
 #endif
