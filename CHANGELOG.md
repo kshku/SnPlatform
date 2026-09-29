@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.3.2] - 2026-09-28
+
+### Fixed
+- sn_platform_page_size() narrowed the sysconf result with SN_MAX(0, ps), which
+  turned the documented -1 error return into a page size of zero instead of
+  reporting it, and SN_ASSERT is compiled out in release so nothing caught it.
+  The result is now checked before it is narrowed
+
+### Changed
+- -Wconversion and -Wsign-conversion are on for gcc and clang. The code was
+  already clean of both
+
 ## [0.3.1] - 2026-09-28
 
 ### Changed
