@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.3.0] - 2026-09-28
+
+### Fixed
+- The cpu instruction wrappers sn_cpuid, sn_xgetbv, sn_rdtsc, sn_rdtscp and
+  sn_cntvct_el0 are internal helpers that no public header declares, but they
+  were compiled with external linkage, so a static build published them as
+  global symbols where they could collide with a consumer's own. They are now
+  static. On MSVC the definitions come from platform.asm instead, so the
+  declarations there stay externally visible and the file still binds to them.
+  The public headers are unchanged, so this narrows the ABI without changing
+  the API
+
 ## [0.2.0] - 2026-06-29
 
 ### Changes
