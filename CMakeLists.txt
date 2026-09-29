@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15...3.31)
 
-project(SnPlatform VERSION 0.3.0 DESCRIPTION "A platform for Sn* projects" LANGUAGES C)
+project(SnPlatform VERSION 0.3.1 DESCRIPTION "A platform for Sn* projects" LANGUAGES C)
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
     if(CMAKE_SYSTEM_PROCESSOR MATCHES "ARM64|aarch64|AARCH64")
@@ -13,7 +13,7 @@ endif()
 include(FetchContent)
 FetchContent_Declare(sncore
     GIT_REPOSITORY https://github.com/kshku/SnCore.git
-    GIT_TAG v0.2.0
+    GIT_TAG v0.3.1
 )
 FetchContent_MakeAvailable(sncore)
 
