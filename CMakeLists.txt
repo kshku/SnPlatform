@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.15...3.31)
 
-project(SnPlatform VERSION 0.3.1 DESCRIPTION "A platform for Sn* projects" LANGUAGES C)
+project(SnPlatform VERSION 0.3.2 DESCRIPTION "A platform for Sn* projects" LANGUAGES C)
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
     if(CMAKE_SYSTEM_PROCESSOR MATCHES "ARM64|aarch64|AARCH64")
@@ -31,6 +31,7 @@ set(gcc_clang_comp "$<COMPILE_LANG_AND_ID:C,Clang,GNU>")
 set(msvc_comp "$<COMPILE_LANG_AND_ID:C,MSVC>")
 
 target_compile_options(sn_platform_configs INTERFACE "$<${gcc_clang_comp}:-Wall;-Wextra;-Wformat;-Wuninitialized;-Wpedantic>")
+target_compile_options(sn_platform_configs INTERFACE "$<${gcc_clang_comp}:-Wconversion;-Wsign-conversion>")
 
 target_compile_options(sn_platform_configs INTERFACE "$<${gcc_clang_comp}:-fvisibility=hidden>")
 

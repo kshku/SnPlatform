@@ -53,10 +53,14 @@ uint32_t sn_platform_page_size(void) {
     static uint32_t page_size;
     if (page_size) return page_size;
 
+    /* sysconf returns -1 on error, so check before narrowing. SN_MAX(0, ps)
+     * turned the error into a page size of zero, and SN_ASSERT is compiled out in
+     * release, so a caller asking for the page size got a zero and had no way to
+     * tell. A page size of zero cannot be served, so fall back to the smallest
+     * value these platforms use. */
     long ps = sysconf(_SC_PAGE_SIZE);
-    page_size = SN_MAX(0, ps);
+    page_size = (ps > 0) ? (uint32_t)ps : (uint32_t)4096;
 
-    SN_ASSERT(page_size > 0);
     return page_size;
 }
 
