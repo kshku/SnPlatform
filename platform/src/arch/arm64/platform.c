@@ -11,7 +11,19 @@
         #include <windows.h>
     #endif
 
-uint64_t sn_cntvct_el0(void);
+    /*
+     * The instruction wrapper below is an internal helper, never part of the
+     * public API. On MSVC it comes from platform.asm, so it has to stay
+     * externally visible for this file to bind to it. Everywhere else it is
+     * defined here, and static keeps it out of the library's symbol table.
+     */
+    #if defined(SN_COMPILER_MSVC)
+        #define SN_INTRINSIC
+    #else
+        #define SN_INTRINSIC static
+    #endif
+
+SN_INTRINSIC uint64_t sn_cntvct_el0(void);
 
 static void detect_features(uint8_t features[SN_CPU_FEATURE_MAX]);
 
@@ -85,7 +97,7 @@ static void detect_features(uint8_t features[SN_CPU_FEATURE_MAX]) {
 
     #if !defined(SN_COMPILER_MSVC)
 
-uint64_t sn_cntvct_el0(void) {
+SN_INTRINSIC uint64_t sn_cntvct_el0(void) {
     uint64_t val;
     __asm__ volatile("mrs %0, cntvct_el0" : "=r"(val));
     return val;
@@ -93,4 +105,5 @@ uint64_t sn_cntvct_el0(void) {
 
     #endif
 
+    #undef SN_INTRINSIC
 #endif
